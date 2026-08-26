@@ -154,6 +154,7 @@ span.highlight {
   height: auto;
   aspect-ratio: 1;
   object-fit: cover;
+  object-position: 50% 30%;
 }
 
 .red-text {
@@ -481,6 +482,14 @@ html:not([data-theme="dark"]) .snap-zoom-close:hover {
 
 html:not([data-theme="dark"]) .snap-zoom-caption {
   color: rgba(0, 0, 0, 0.95);
+}
+
+.news-scroll {
+  max-height: calc(2 * 4.5em);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+  scrollbar-gutter: stable;
 }
 
 .news-year {

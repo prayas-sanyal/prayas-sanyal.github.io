@@ -5,6 +5,7 @@ venue: "Under Review"
 image: "assets/images/solartformer2.png"
 order: 4
 selected: false
+paper_url: "https://arxiv.org/abs/2604.24306"
 author_links:
   - name: "Prayas Sanyal"
     url: "/"
