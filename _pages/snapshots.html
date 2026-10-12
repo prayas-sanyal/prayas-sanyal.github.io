@@ -14,8 +14,9 @@ permalink: /snapshots/
   {% assign images_sorted = images | sort: 'modified_time' | reverse %}
   {% for file in images_sorted %}
     {% assign meta = site.data.snapshots | where: 'path', file.path | first %}
+    {% assign thumb = site.data.snapshot_thumbs[file.path] %}
     <div class="masonry-item snap-fade" data-full="{{ file.path | relative_url }}" data-location="{{ meta.location }}" data-date="{{ meta.date | default: file.modified_time | date: "%b, %Y" }}">
-      <img src="{{ file.path | relative_url }}" alt="snapshot" loading="{% if forloop.index0 == 0 %}eager{% else %}lazy{% endif %}" fetchpriority="{% if forloop.index0 == 0 %}high{% else %}auto{% endif %}" decoding="async">
+      <img src="{{ thumb.srcset.first.url | relative_url }}" srcset="{% for t in thumb.srcset %}{{ t.url | relative_url }} {{ t.w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}" sizes="auto, (max-width: 520px) 50vw, 600px" width="{{ thumb.width }}" height="{{ thumb.height }}" alt="snapshot" loading="{% if forloop.index0 == 0 %}eager{% else %}lazy{% endif %}" fetchpriority="{% if forloop.index0 == 0 %}high{% else %}auto{% endif %}" decoding="async">
       <div class="snap-overlay">
         <span class="snap-location">{{ meta.location }}</span>
         <span class="snap-date">{{ meta.date | default: file.modified_time | date: "%b, %Y" }}</span>
@@ -40,10 +41,10 @@ permalink: /snapshots/
     var n=document.createElement('div');n.className='snap-zoom-arrow snap-zoom-arrow--next';n.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     var b=document.createElement('button');b.className='snap-zoom-close';b.setAttribute('aria-label','Close');b.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     o.appendChild(p);o.appendChild(n);o.appendChild(b);document.body.appendChild(o);
-    function show(src){i.src=src;o.classList.add('visible')}function hide(){o.classList.remove('visible');i.removeAttribute('src')}
+    function show(el){var t=el.querySelector('img'),w=t.getAttribute('width'),full=el.getAttribute('data-full'),f=new Image();i.style.width='min('+w+'px, 94vw, '+90*w/t.getAttribute('height')+'vh)';i.src=t.currentSrc||t.src;f.onload=function(){if(items[idx]===el&&o.classList.contains('visible'))i.src=full};f.src=full;o.classList.add('visible')}function hide(){o.classList.remove('visible');i.removeAttribute('src')}
     var items=[].slice.call(document.querySelectorAll('.masonry-item')),idx=-1;
     function setCap(el){var l=el.getAttribute('data-location')||'',d=el.getAttribute('data-date')||'';c.textContent=(l&&d)?(l+' - '+d):(l||d)}
-    function openAt(k){if(k<0||k>=items.length)return;idx=k;var el=items[idx];setCap(el);show(el.getAttribute('data-full'))}
+    function openAt(k){if(k<0||k>=items.length)return;idx=k;var el=items[idx];setCap(el);show(el)}
     document.addEventListener('click',function(e){var t=e.target.closest('.masonry-item');if(t&&t.dataset.full){e.preventDefault();openAt(items.indexOf(t))}});
     o.addEventListener('click',function(e){
       var rect = o.getBoundingClientRect();
@@ -74,8 +75,7 @@ permalink: /snapshots/
       for(var idx=0; idx<items.length; idx++){
         var item=items[idx];
         var img=item.querySelector('img');
-        if(!img || !(img.naturalWidth && img.naturalHeight)) continue;
-        var ar=img.naturalWidth/img.naturalHeight;
+        var ar=img.getAttribute('width')/img.getAttribute('height');
         row.push({item:item, ar:ar});
         sumAR+=ar;
         var rowWidthAtTarget=sumAR*target + gap*(row.length-1);
@@ -88,11 +88,7 @@ permalink: /snapshots/
         }
       }
     }
-    function onReady(){ layout(); window.addEventListener('resize', layout); }
-    var imgs=[].slice.call(grid.querySelectorAll('img'));
-    var pending=imgs.filter(function(im){ return !im.complete || !im.naturalWidth; });
-    if(pending.length){ var left=pending.length; pending.forEach(function(im){ im.addEventListener('load', function(){ if(--left===0) onReady(); }, { once:true }); }); }
-    else { onReady(); }
+    layout(); window.addEventListener('resize', layout);
   })();
 </script>
 

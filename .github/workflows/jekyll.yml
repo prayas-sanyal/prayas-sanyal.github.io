@@ -27,6 +27,12 @@ jobs:
           ruby-version: '3.1' 
           bundler-cache: true 
           cache-version: 0 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Generate snapshot thumbnails
+        run: pip install pillow && python _scripts/snapshot_thumbs.py
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
