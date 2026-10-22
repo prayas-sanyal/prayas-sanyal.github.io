@@ -1,0 +1,62 @@
+{% if include.show_heading %}<heading>Selected Publications</heading>{% endif %}
+<table style="width:100%;border:0px;border-spacing:0 10px;border-collapse:separate;margin-right:auto;margin-left:auto;">
+  <tbody>
+    <p></p>
+    {% assign sorted_publications = site.publications | sort: 'order' %}
+    {% for pub in sorted_publications %}
+      {% if include.selected_only and pub.selected != true %}{% continue %}{% endif %}
+      <tr class="pub-row">
+        <td style="padding:10px;width:30%;vertical-align:middle;text-align:center">
+          {% if pub.paper_url %}
+            <a href="{{ pub.paper_url }}" target="_blank">
+              <img class="effectfront" src='{{ pub.image | relative_url }}' width="200">
+            </a>
+          {% else %}
+            <img class="effectfront" src='{{ pub.image | relative_url }}' width="200">
+          {% endif %}
+        </td>
+        <td style="padding:10px;width:70%;vertical-align:top">
+          <papertitle><big>{{ pub.title }}</big></papertitle>
+          <br><br>
+          {% assign authors_with_sup = pub.authors | replace: '*', '<sup>*</sup>' %}
+          {% assign authors_html = authors_with_sup %}
+
+          {% if pub.author_links %}
+            {% for al in pub.author_links %}
+              {% assign author_name = al.name %}
+              {% if author_name == site.title %}{% continue %}{% endif %}
+              {% assign author_url = al.url %}
+              {% assign strong_name = '<strong>' | append: author_name | append: '</strong>' %}
+              {% assign strong_link = '<a class="author-link" href="' | append: author_url | append: '" target="_blank">' | append: strong_name | append: '</a>' %}
+              {% assign plain_link = '<a class="author-link" href="' | append: author_url | append: '" target="_blank">' | append: author_name | append: '</a>' %}
+              {% capture placeholder %}__AUTHSTR_{{ forloop.index0 }}__{% endcapture %}
+              {% assign authors_html = authors_html | replace: strong_name, placeholder %}
+              {% assign authors_html = authors_html | replace: author_name, plain_link %}
+              {% assign authors_html = authors_html | replace: placeholder, strong_link %}
+            {% endfor %}
+          {% endif %}
+
+          {{ authors_html }}
+          {% if pub.authors contains '*' %}
+            <br><span style="color:gray;font-size:90%"><sup>*</sup> equal contribution</span>
+          {% endif %}
+          <br><br>
+          <em>{{ pub.venue }}</em>{% if pub.year %}, {{ pub.year }}{% endif %}
+          {% if pub.award %}
+            <br>
+            <span class="red-text">{{ pub.award }}</span>
+          {% endif %}
+          <br><br>
+          <span class="pub-links">
+            {%- if pub.paper_url -%}<span>[</span><a href="{{ pub.paper_url }}" target="_blank">Paper</a><span>]</span>{%- endif -%}
+            {%- if pub.code_url -%}<span>[</span><a href="{{ pub.code_url }}" target="_blank">Code</a><span>]</span>{%- endif -%}
+          </span>
+          {% if pub.additional_links %}
+            {{ pub.additional_links }}
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if include.show_view_all %}<p style="text-align:right;margin-top:10px;"><a href="{{ '/publications/' | relative_url }}">View all &#8594;</a></p>{% endif %}

@@ -1,0 +1,26 @@
+<heading>News</heading>
+<div class="news-scroll">
+<table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
+  <tbody>
+      {% assign news_by_year = site.news | group_by: 'year' | sort: 'name' | reverse %}
+      {% for year_group in news_by_year %}
+        {% assign year_news = year_group.items | sort: 'month' | reverse %}
+        {% for news_item in year_news %}
+          <tr>
+            <td style="padding:3px 20px;width:15%;vertical-align:baseline;text-align:left">
+              {% if forloop.first %}
+                <strong class="news-year" style="font-size:16px">{{ news_item.year }}</strong>
+              {% endif %}
+            </td>
+            <td style="padding:3px 5px;width:65%;vertical-align:baseline">
+              {{ news_item.content | strip }}
+            </td>
+            <td style="padding:3px 20px;width:20%;vertical-align:baseline;text-align:right">
+              <em class="news-date">{{ news_item.display_date }}</em>
+            </td>
+          </tr>
+        {% endfor %}
+      {% endfor %}
+  </tbody>
+</table>
+</div>

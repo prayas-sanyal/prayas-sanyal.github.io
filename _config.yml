@@ -1,0 +1,52 @@
+
+title: "Prayas Sanyal"
+name: "Prayas Sanyal"
+url: "https://prayas-sanyal.github.io"
+baseurl: ""
+
+last_updated: "July, 2026"
+
+
+author:
+  name: "Prayas Sanyal"
+  email: "prayassanyal008@gmail.com"
+  avatar: "assets/images/me.jpeg"
+  cv: "assets/data/cv.pdf"
+  google_scholar: "https://scholar.google.com/citations?view_op=list_works&hl=en&hl=en&user=Dmm2mhIAAAAJ"
+  twitter: "https://twitter.com/prayas_0"
+  github: "https://github.com/prayas-sanyal"
+  linkedin: "https://linkedin.com/in/prayas-sanyal/"
+
+
+markdown: kramdown
+highlighter: rouge
+permalink: /:title/
+paginate: 10
+paginate_path: "/page:num/"
+
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-email-protect
+
+collections:
+  publications:
+    output: false
+  news:
+    output: false
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+  - vendor/
+
+include:
+  - _pages
+  - .well-known
+
+sass:
+  sass_dir: _sass
+  style: compressed

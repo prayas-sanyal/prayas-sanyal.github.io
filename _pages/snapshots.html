@@ -1,0 +1,95 @@
+---
+layout: page
+title: snapshots
+permalink: /snapshots/
+---
+
+<blockquote class="snap-quote">
+  <p>This cosmic dance of bursting decadence and withheld permissions twists all our arms collectively, but if sweetness can win, and it can, then I'll still be here tomorrow to high-five you yesterday, my friend. Peace.</p>
+  <span class="snap-quote__attr">~ Royal Tart Toter, <em>The Other Tarts</em></span>
+</blockquote>
+
+<div class="masonry masonry--justified" aria-live="polite">
+  {% assign images = site.static_files | where_exp: 'f', 'f.path contains "assets/data/snapshots/"' %}
+  {% assign images_sorted = images | sort: 'modified_time' | reverse %}
+  {% for file in images_sorted %}
+    {% assign meta = site.data.snapshots | where: 'path', file.path | first %}
+    {% assign thumb = site.data.snapshot_thumbs[file.path] %}
+    <div class="masonry-item snap-fade" data-full="{{ thumb.srcset.last.url | relative_url }}" data-location="{{ meta.location }}" data-date="{{ meta.date | default: file.modified_time | date: "%b, %Y" }}">
+      <img src="{{ thumb.srcset.first.url | relative_url }}" srcset="{% for t in thumb.srcset %}{{ t.url | relative_url }} {{ t.w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}" sizes="auto, (max-width: 520px) 50vw, 600px" width="{{ thumb.width }}" height="{{ thumb.height }}" alt="snapshot" loading="{% if forloop.index0 == 0 %}eager{% else %}lazy{% endif %}" fetchpriority="{% if forloop.index0 == 0 %}high{% else %}auto{% endif %}" decoding="async">
+      <div class="snap-overlay">
+        <span class="snap-location">{{ meta.location }}</span>
+        <span class="snap-date">{{ meta.date | default: file.modified_time | date: "%b, %Y" }}</span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  (function(){
+    var els = document.querySelectorAll('.snap-fade');
+    if (!('IntersectionObserver' in window)) { els.forEach(function(el){ el.classList.add('visible'); }); return; }
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } }); }, { rootMargin:'0px 0px -10% 0px', threshold:0.1 });
+    els.forEach(function(el){ io.observe(el); });
+  })();
+
+  (function(){
+    var o=document.createElement('div');o.className='snap-zoom-overlay';
+    var i=document.createElement('img');i.setAttribute('decoding','async');i.setAttribute('loading','eager');o.appendChild(i);
+    var c=document.createElement('div');c.className='snap-zoom-caption';o.appendChild(c);
+    var p=document.createElement('div');p.className='snap-zoom-arrow snap-zoom-arrow--prev';p.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var n=document.createElement('div');n.className='snap-zoom-arrow snap-zoom-arrow--next';n.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var b=document.createElement('button');b.className='snap-zoom-close';b.setAttribute('aria-label','Close');b.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    o.appendChild(p);o.appendChild(n);o.appendChild(b);document.body.appendChild(o);
+    function show(el){var t=el.querySelector('img'),w=t.getAttribute('width');i.style.width='min('+w+'px, 94vw, '+90*w/t.getAttribute('height')+'vh)';i.style.opacity=0;i.onload=function(){i.style.opacity=1};i.src=el.getAttribute('data-full');o.classList.add('visible')}function hide(){o.classList.remove('visible');i.removeAttribute('src')}
+    var items=[].slice.call(document.querySelectorAll('.masonry-item')),idx=-1;
+    function setCap(el){var l=el.getAttribute('data-location')||'',d=el.getAttribute('data-date')||'';c.textContent=(l&&d)?(l+' - '+d):(l||d)}
+    function openAt(k){if(k<0||k>=items.length)return;idx=k;var el=items[idx];setCap(el);show(el)}
+    document.addEventListener('click',function(e){var t=e.target.closest('.masonry-item');if(t&&t.dataset.full){e.preventDefault();openAt(items.indexOf(t))}});
+    o.addEventListener('click',function(e){
+      var rect = o.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      if (x < rect.width/2) { openAt((idx-1+items.length)%items.length); }
+      else { openAt((idx+1+items.length)%items.length); }
+    });
+
+    b.addEventListener('click',function(e){e.stopPropagation();hide()});
+    document.addEventListener('keydown',function(e){if(!o.classList.contains('visible')) return; if(e.key==='Escape')hide();if(e.key==='ArrowRight')openAt((idx+1+items.length)%items.length);if(e.key==='ArrowLeft')openAt((idx-1+items.length)%items.length)});
+    p.addEventListener('click',function(e){e.stopPropagation();openAt((idx-1+items.length)%items.length)});
+    n.addEventListener('click',function(e){e.stopPropagation();openAt((idx+1+items.length)%items.length)});
+  })();
+  (function(){
+    var grid=document.querySelector('.masonry.masonry--justified');
+    if(!grid) return;
+    function getGap(){ var g=parseInt(getComputedStyle(grid).getPropertyValue('gap'),10); return isNaN(g)?10:g; }
+    function targetHeight(w){ if(w<600) return 300; if(w<1100) return 320; return 350; }
+    function maxPerRow(w){ if(w<700) return 2; if(w<1100) return 3; if(w<1500) return 4; return 5; }
+    function layout(){
+      var containerWidth=grid.clientWidth;
+      var gap=getGap();
+      var target=targetHeight(containerWidth);
+      var items=[].slice.call(grid.children);
+      var row=[]; var sumAR=0;
+      items.forEach(function(it){ it.style.width=''; it.style.height=''; });
+      if(containerWidth<=520){ return; }
+      for(var idx=0; idx<items.length; idx++){
+        var item=items[idx];
+        var img=item.querySelector('img');
+        var ar=img.getAttribute('width')/img.getAttribute('height');
+        row.push({item:item, ar:ar});
+        sumAR+=ar;
+        var rowWidthAtTarget=sumAR*target + gap*(row.length-1);
+        var isLast = idx===items.length-1;
+        if(row.length>=maxPerRow(containerWidth) || rowWidthAtTarget>=containerWidth || isLast){
+          var h=Math.floor((containerWidth - gap*(row.length-1))/sumAR);
+          if(isLast && rowWidthAtTarget<containerWidth*0.9) h=Math.min(h,target);
+          row.forEach(function(r){ var w=Math.round(h*r.ar); r.item.style.width=w+'px'; r.item.style.height=h+'px'; });
+          row=[]; sumAR=0;
+        }
+      }
+    }
+    layout(); window.addEventListener('resize', layout);
+  })();
+</script>
+
+

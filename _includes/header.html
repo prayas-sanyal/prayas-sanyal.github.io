@@ -1,0 +1,28 @@
+<header class="site-header">
+  {% assign first_name = site.author.name | split: ' ' | first %}
+  {% assign last_name = site.author.name | remove_first: first_name %}
+  <nav class="site-nav" aria-label="Primary">
+    <div class="nav-section nav-section-left">
+      {% if page.layout != 'default' %}
+      <a href="{{ '/' | relative_url }}" class="nav-brand-link">
+        <span class="nav-brand">
+          <span class="nav-brand-first">{{ first_name }}</span>{{ last_name }}
+        </span>
+      </a>
+      {% endif %}
+    </div>
+    <div class="nav-section nav-section-right">
+      <a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' %}active{% endif %}">about</a>
+      <a href="{{ '/publications/' | relative_url }}" class="nav-link {% if page.url contains '/publications/' %}active{% endif %}">publications</a>
+      <a href="{{ '/cv/' | relative_url }}" class="nav-link {% if page.url contains '/cv/' %}active{% endif %}">cv</a>
+      <a href="{{ '/snapshots/' | relative_url }}" class="nav-link {% if page.url contains '/snapshots/' %}active{% endif %}">snapshots</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"></button>
+    </div>
+  </nav>
+  <div class="scroll-progress">
+    <div class="scroll-progress-bar"></div>
+  </div>
+</header>
+
+
+

@@ -1,0 +1,68 @@
+<script>
+  (function() {
+    var root = document.documentElement;
+    var themeToggle = document.getElementById('themeToggle');
+    var systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+    var storedTheme = systemDark.matches ? 'dark' : 'light';
+
+    try {
+      storedTheme = localStorage.getItem('theme') || storedTheme;
+    } catch (e) {}
+
+    if (storedTheme === 'dark') {
+      root.setAttribute('data-theme', 'dark');
+    } else {
+      root.removeAttribute('data-theme');
+    }
+
+    systemDark.addEventListener('change', function(e) {
+      try { if (localStorage.getItem('theme')) return; } catch (err) {}
+      if (e.matches) {
+        root.setAttribute('data-theme', 'dark');
+      } else {
+        root.removeAttribute('data-theme');
+      }
+    });
+
+    function toggleTheme() {
+      var isDark = root.getAttribute('data-theme') === 'dark';
+      var nextTheme = isDark ? 'light' : 'dark';
+
+      if (nextTheme === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+      } else {
+        root.removeAttribute('data-theme');
+      }
+
+      try { localStorage.setItem('theme', nextTheme); } catch (e) {}
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+      themeToggle.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleTheme();
+        }
+      });
+    }
+  })();
+
+  (function() {
+    var bar = document.querySelector('.scroll-progress-bar');
+    if (!bar) return;
+
+    function updateScrollProgress() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var progress = docHeight > 0 ? scrollTop / docHeight : 0;
+      if (progress < 0) progress = 0;
+      if (progress > 1) progress = 1;
+      bar.style.transform = 'scaleX(' + progress + ')';
+    }
+
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener('resize', updateScrollProgress);
+    updateScrollProgress();
+  })();
+</script>
