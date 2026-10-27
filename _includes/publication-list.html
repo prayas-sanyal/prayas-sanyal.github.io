@@ -51,12 +51,9 @@
             {%- if pub.paper_url -%}<span>[</span><a href="{{ pub.paper_url }}" target="_blank">Paper</a><span>]</span>{%- endif -%}
             {%- if pub.code_url -%}<span>[</span><a href="{{ pub.code_url }}" target="_blank">Code</a><span>]</span>{%- endif -%}
           </span>
-          {% if pub.additional_links %}
-            {{ pub.additional_links }}
-          {% endif %}
         </td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
-{% if include.show_view_all %}<p style="text-align:right;margin-top:10px;"><a href="{{ '/publications/' | relative_url }}">View all &#8594;</a></p>{% endif %}
+{% if include.show_view_all %}<p style="text-align:right;margin-top:10px;"><a href="{{ '/publications/' | relative_url }}">View all</a></p>{% endif %}

@@ -2,35 +2,33 @@
 ---
 :root {
   --font-stack: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --bg-color: #f7ffff;
+  --bg-color: #ffffff;
   --text-color: #000000;
   --link-color: #dc0fd2;
   --link-hover-color: #3c28f0;
   --border-color: #dddddd;
-  --highlight-color: #f7eec5;
   --own-name-color: #2900bd;
   --red-color: #ff0000;
   --gray-color: #666666;
   --light-gray-color: #999999;
   --nav-gradient-from: rgba(0,0,0,0.03);
   --nav-border-color: var(--border-color);
-  --header-bg: rgba(215, 218, 251, 0.7);
+  --header-bg: rgba(255, 255, 255, 0.9);
 }
 
 [data-theme="dark"] {
-  --bg-color: #0a1217;
-  --text-color: #e0e0e0;
+  --bg-color: #07140e;
+  --text-color: #e6eee8;
   --link-color: #4a9eff;
   --link-hover-color: #d026ff;
-  --border-color: #444444;
-  --highlight-color: #404040;
+  --border-color: #1c3828;
   --own-name-color: #a99bff;
   --red-color: #ff6b6b;
-  --gray-color: #b0b0b0;
-  --light-gray-color: #888888;
-  --nav-gradient-from: rgba(0,0,0,0.03);
-  --nav-border-color: rgba(255,255,255,0.01);
-  --header-bg: rgba(5, 9, 13, 0.7);
+  --gray-color: #aeb8b1;
+  --light-gray-color: #84968b;
+  --nav-gradient-from: rgba(0, 12, 6, 0.45);
+  --nav-border-color: rgba(170, 210, 180, 0.1);
+  --header-bg: rgba(4, 14, 9, 0.86);
 }
 
 a {
@@ -72,6 +70,8 @@ strong {
 }
 
 heading {
+  display: block;
+  margin-top: 36px;
   font-family: var(--font-stack);
   font-size: 22px;
   color: var(--text-color);
@@ -93,25 +93,9 @@ papertitle {
   color: var(--text-color);
 }
 
-.pub-row td {
-  background: rgba(0, 0, 0, 0.035);
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.pub-row td:first-child {
-  border-left: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 12px 0 0 12px;
-}
-
-.pub-row td:last-child {
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 0 12px 12px 0;
-}
-
-[data-theme="dark"] .pub-row td {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.06);
+.pub-row + .pub-row td {
+  border-top: 1px solid var(--border-color);
+  padding-top: 22px !important;
 }
 
 .pub-row strong {
@@ -122,23 +106,6 @@ name {
   font-family: var(--font-stack);
   font-size: 31px;
   color: var(--text-color);
-}
-
-.one {
-  width: 160px;
-  height: 160px;
-  position: relative;
-}
-
-.two {
-  width: 160px;
-  height: 160px;
-  position: absolute;
-  transition: opacity .2s ease-in-out;
-}
-
-.fade {
-  transition: opacity .2s ease-in-out;
 }
 
 .effectfront {
@@ -152,12 +119,6 @@ name {
 .effectfront:hover {
   transform: scale(2.5);
   transition: all 0.3s;
-}
-
-span.highlight {
-  background-color: var(--highlight-color);
-  padding: 2px 5px;
-  border-radius: 3px;
 }
 
 .rounded-circle {
@@ -496,24 +457,6 @@ html:not([data-theme="dark"]) .snap-zoom-caption {
   color: rgba(0, 0, 0, 0.95);
 }
 
-.news-scroll {
-  max-height: calc(2 * 4.5em);
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 2px;
-  scrollbar-gutter: stable;
-}
-
-.news-year {
-  color: var(--gray-color) !important;
-}
-
-.news-date {
-  color: var(--light-gray-color) !important;
-}
-
-.news-link,
-.news-link:visited,
 .pub-links a,
 .pub-links a:visited,
 .author-link,
@@ -521,8 +464,6 @@ html:not([data-theme="dark"]) .snap-zoom-caption {
   color: var(--link-color) !important;
 }
 
-.news-link:hover,
-.news-link:focus,
 .pub-links a:hover,
 .pub-links a:focus,
 .author-link:hover,
@@ -550,8 +491,9 @@ html:not([data-theme="dark"]) .snap-zoom-caption {
   align-items: center;
   justify-content: center;
   vertical-align: middle;
-  color: #0d47a1;
+  color: var(--gray-color);
   margin: 0 !important;
+  transition: color 0.15s ease;
 }
 
 .social-icons svg {
@@ -561,35 +503,9 @@ html:not([data-theme="dark"]) .snap-zoom-caption {
   overflow: visible; 
 }
 
-.social-icons a:hover {
-  color: #0a3576;
-}
-
-.social-icons i {
-  font-size: 1.5rem !important;
-  line-height: 1;
-  display: block;
-  transition: transform 0.15s ease, color 0.15s ease;
-}
-
-.social-icons a:hover i {
-  transform: scale(1.15);
-}
-
-.social-icons a:focus i {
-  transform: none;
-}
-
-.social-icons a:hover:focus i {
-  transform: scale(1.15);
-}
-
-[data-theme="dark"] .social-icons a {
-  color: #6ea8ff;
-}
-
-[data-theme="dark"] .social-icons a:hover {
-  color: #9cc3ff;
+.social-icons a:hover,
+.social-icons a:focus {
+  color: var(--text-color);
 }
 
 .snap-quote {
@@ -603,7 +519,7 @@ html:not([data-theme="dark"]) .snap-zoom-caption {
   color: var(--text-color);
 }
 
-[data-theme="dark"] .snap-quote { background: rgba(255,255,255,0.04); }
+[data-theme="dark"] .snap-quote { background: rgba(150, 200, 165, 0.05); }
 
 .snap-quote p { 
   margin: 0 0 6px;

@@ -7,8 +7,6 @@ vendor/
 
 Gemfile.lock
 
-.well-known/appspecific/
-
 .DS_Store
 .DS_Store?
 ._*
@@ -16,8 +14,6 @@ Gemfile.lock
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-tn/
 
 assets/data/snapshot-thumbs/
 _data/snapshot_thumbs.json

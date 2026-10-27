@@ -3,7 +3,7 @@ title: "Pan-Ret: A Semi-supervised Framework for Scalable Detection of Pan-Retin
 authors: "Rohan Banerjee, Rakhshanda Mujib, <strong>Prayas Sanyal</strong>, Tapabrata Chakraborti, Sanjoy Kumar Saha"
 venue: "Medical & Biological Engineering & Computing"
 year: 2025
-image: "assets/images/panret.png"
+image: "assets/images/panret.webp"
 paper_url: "https://doi.org/10.1007/s11517-024-03250-5"
 order: 2
 selected: true
